@@ -1,0 +1,23 @@
+{
+  "manifest_version": 2,
+
+  "name": "StackGrab",
+  "version": "0.0",
+  "description": "easy code copier for stackoverflow",
+  "icons": { "128": "icon_128.png" },
+  "permissions": ["tabs"],
+  "content_scripts": [
+    {
+      "matches": ["*://*.stackoverflow.com/*"],
+      "js": ["js/jquery-3.2.1-min.js","js/copier.js"]
+    }
+  ],
+  "browser_action": {
+    "default_title": "StackGrab",
+    "default_icon": "icon_19.png",
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    "resources/*.png"
+  ],
+}
