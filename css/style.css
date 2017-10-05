@@ -26,6 +26,7 @@
   position: relative; }
 
 .popup {
-  min-width: 100px; }
+  min-width: 100px;
+  background-color: black; }
 
 /*# sourceMappingURL=style.css.map */

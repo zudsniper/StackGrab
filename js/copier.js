@@ -2,10 +2,6 @@
  * Created by jason on 10/3/17.
  */
 
-/*
- * Replace all SVG images with inline SVG
- */
-
 var OSName = "Unknown";
 if (window.navigator.userAgent.indexOf("Windows NT 10.0")!= -1) OSName="Windows 10";
 if (window.navigator.userAgent.indexOf("Windows NT 6.2") != -1) OSName="Windows 8";
@@ -60,7 +56,7 @@ function addCopyIcons() {
               $(this).parent().each(function() {
                    $(this).children(":first.copy-popup, .copied-popup").each(function() {
                        $(this).remove();
-                   })
+                   });
                });
        });
 
@@ -71,12 +67,11 @@ function addCopyIcons() {
        });
 
        initCopyKeybind($(this).parent());
-
     });
 }
 
 /**
- * Parameter: copy-wrapper
+ * @param copy-wrapper
  */
 function showCopiedStatus( wrapper ) {
     wrapper.each(function() {
@@ -86,7 +81,7 @@ function showCopiedStatus( wrapper ) {
 }
 
 /**
- * Parameter: copy-wrapper
+ * @param copy-wrapper
  */
 function initCopyKeybind( wrapper ) {
     wrapper.hover(function() {
@@ -104,29 +99,40 @@ var lastKey;
 
 function shortcutCopy( e ) {
 
-    var condition = (e.ctrlKey && e.key=="c");
 
-    if(OSName == "Mac/iOS") {
+    // make sure there's not a selection that is within the code element you would be copying, being that if there is, the
+    // user wants to be able to copy that specific subset of the text, not the whole text.
+    if (($(window.getSelection().anchorNode).parent().parent().parent().parent().attr('class') != 'copy-wrapper' )
+        || (window.getSelection().anchorNode==null)) {
 
-        var cmdPressedLast = false;
+        var condition = (e.ctrlKey && e.key == "c");
 
-        if(lastKey!=null) {
-            if(lastKey == "Meta") {
-                cmdPressedLast = true;
+        if (OSName == "Mac/iOS") {
+
+            var cmdPressedLast = false;
+
+            if (lastKey != null) {
+                if (lastKey == "Meta") {
+                    cmdPressedLast = true;
+                }
             }
+            lastKey = e.key;
+
+            condition = (cmdPressedLast && e.key == "c");
         }
-        lastKey = e.key;
 
-        condition = (cmdPressedLast && e.key == "c");
-    }
-
-    if(condition) {
-        copyTextToClipboard(hoveredCode);
-        showCopiedStatus(hoveredWrapper);
+        if (condition) {
+            copyTextToClipboard(hoveredCode);
+            showCopiedStatus(hoveredWrapper);
+        }
     }
 }
 
-// 'pre code' jquery element
+/**
+ * 'pre code' jquery element
+ * @param codeblock
+ * @returns copiedcode
+ */
 function copy( codeblock ) {
 
     var language;
@@ -147,7 +153,7 @@ function copy( codeblock ) {
 
     //check comment type database, for now assume // is comment
 
-    //credit
+    //credit assignment starts here
 
     var creditFooter = codeblock.parent().parent().parent().find(".fw");
 
@@ -190,6 +196,11 @@ function copy( codeblock ) {
     return text;
 }
 
+/**
+ *  Add text to clipboard
+ * @param text
+ */
+
 function copyTextToClipboard(text) {
     var copyFrom = $('<textarea/>');
     copyFrom.text(text);
@@ -197,36 +208,4 @@ function copyTextToClipboard(text) {
     copyFrom.select();
     document.execCommand('copy');
     copyFrom.remove();
-}
-
-function imgToSVG() {
-    $('img.svg').each(function () {
-        var $img = jQuery(this);
-        var imgID = $img.attr('id');
-        var imgClass = $img.attr('class');
-        var imgURL = $img.attr('src');
-
-        $.get(imgURL, function (data) {
-            // Get the SVG tag, ignore the rest
-            var $svg = jQuery(data).find('svg');
-
-            // Add replaced image's ID to the new SVG
-            if (typeof imgID !== 'undefined') {
-                $svg = $svg.attr('id', imgID);
-            }
-            // Add replaced image's classes to the new SVG
-            if (typeof imgClass !== 'undefined') {
-                $svg = $svg.attr('class', imgClass + ' replaced-svg');
-            }
-
-            // Remove any invalid XML tags as per http://validator.w3.org
-            $svg = $svg.removeAttr('xmlns:a');
-
-            // Replace image with new SVG
-            $img.replaceWith($svg);
-
-        }, 'xml');
-
-
-    });
 }
