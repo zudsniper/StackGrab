@@ -2,10 +2,9 @@
   "manifest_version": 2,
 
   "name": "StackGrab",
-  "version": "0.2",
+  "version": "0.3",
   "description": "easy code copier for stackoverflow",
   "icons": { "128": "resources/icon_128.png" },
-  "permissions": ["tabs"],
   "content_scripts": [
     {
       "matches": ["*://*.stackoverflow.com/*"],
@@ -15,13 +14,12 @@
   ],
   "browser_action": {
     "default_title": "StackGrab",
-    "default_icon": "resources/icon_19.png",
+    "default_icon": "resources/icon_16.png",
     "default_popup": "src/popup.html"
   },
   "web_accessible_resources": [
     "resources/*.png",
     "resources/*.svg",
-    "css/*.scss",
     "css/*.css"
   ]
 }
