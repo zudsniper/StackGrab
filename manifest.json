@@ -2,22 +2,26 @@
   "manifest_version": 2,
 
   "name": "StackGrab",
-  "version": "0.0",
+  "version": "0.1",
   "description": "easy code copier for stackoverflow",
-  "icons": { "128": "icon_128.png" },
+  "icons": { "128": "resources/icon_128.png" },
   "permissions": ["tabs"],
   "content_scripts": [
     {
       "matches": ["*://*.stackoverflow.com/*"],
-      "js": ["js/jquery-3.2.1-min.js","js/copier.js"]
+      "js": ["js/jquery-3.2.1-min.js","js/copier.js"],
+      "css": ["css/style.css"]
     }
   ],
   "browser_action": {
     "default_title": "StackGrab",
-    "default_icon": "icon_19.png",
+    "default_icon": "resources/icon_19.png",
     "default_popup": "popup.html"
   },
   "web_accessible_resources": [
-    "resources/*.png"
-  ],
+    "resources/*.png",
+    "resources/*.svg",
+    "css/*.scss",
+    "css/*.css"
+  ]
 }

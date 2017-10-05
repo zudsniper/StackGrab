@@ -1,0 +1,40 @@
+
+$copy-btn-color: #0645AD;
+$copy-btn-color-hover:  #3366BB;
+
+.copy-btn {
+  color: $copy-btn-color;
+  position:absolute;
+  right:5px;
+  top:5px;
+
+  .hover {
+    color: $copy-btn-color-hover;
+  }
+}
+
+.copy-popup {
+  position:absolute;
+  left: 0px;
+  bottom: 0px;
+
+  font-size: 0.9em;
+
+  color: #000000;
+  background-color: #7d888e;
+}
+
+.copied-popup {
+  position:absolute;
+  left: 0px;
+  bottom: 0px;
+
+  font-size: 0.9em;
+
+  color: #ffffff;
+  background-color: #126600;
+}
+
+.copy-wrapper {
+  position:relative;
+}
