@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "StackGrab",
-  "version": "0.1",
+  "version": "0.2",
   "description": "easy code copier for stackoverflow",
   "icons": { "128": "resources/icon_128.png" },
   "permissions": ["tabs"],
@@ -16,7 +16,7 @@
   "browser_action": {
     "default_title": "StackGrab",
     "default_icon": "resources/icon_19.png",
-    "default_popup": "popup.html"
+    "default_popup": "src/popup.html"
   },
   "web_accessible_resources": [
     "resources/*.png",

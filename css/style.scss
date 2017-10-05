@@ -21,7 +21,7 @@ $copy-btn-color-hover:  #3366BB;
   font-size: 0.9em;
 
   color: #000000;
-  background-color: #7d888e;
+  background-color: #aeb9bf;
 }
 
 .copied-popup {
@@ -37,4 +37,8 @@ $copy-btn-color-hover:  #3366BB;
 
 .copy-wrapper {
   position:relative;
+}
+
+.popup {
+  min-width: 100px;
 }

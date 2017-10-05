@@ -12,7 +12,7 @@
   bottom: 0px;
   font-size: 0.9em;
   color: #000000;
-  background-color: #7d888e; }
+  background-color: #aeb9bf; }
 
 .copied-popup {
   position: absolute;
@@ -24,5 +24,8 @@
 
 .copy-wrapper {
   position: relative; }
+
+.popup {
+  min-width: 100px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -6,6 +6,20 @@
  * Replace all SVG images with inline SVG
  */
 
+var OSName = "Unknown";
+if (window.navigator.userAgent.indexOf("Windows NT 10.0")!= -1) OSName="Windows 10";
+if (window.navigator.userAgent.indexOf("Windows NT 6.2") != -1) OSName="Windows 8";
+if (window.navigator.userAgent.indexOf("Windows NT 6.1") != -1) OSName="Windows 7";
+if (window.navigator.userAgent.indexOf("Windows NT 6.0") != -1) OSName="Windows Vista";
+if (window.navigator.userAgent.indexOf("Windows NT 5.1") != -1) OSName="Windows XP";
+if (window.navigator.userAgent.indexOf("Windows NT 5.0") != -1) OSName="Windows 2000";
+if (window.navigator.userAgent.indexOf("Mac")            != -1) OSName="Mac/iOS";
+if (window.navigator.userAgent.indexOf("X11")            != -1) OSName="UNIX";
+if (window.navigator.userAgent.indexOf("Linux")          != -1) OSName="Linux";
+
+var hoveredCode = "";
+var hoveredWrapper;
+
 addCopyIcons();
 
 function addCopyIcons() {
@@ -18,8 +32,20 @@ function addCopyIcons() {
         var wrapper = $(this).parent().parent();
 
         wrapper.append(
-            "<img class='svg copy-btn' src=' "+ copyIconURL +"' height='40' width='40'>"
+            "<img class='svg copy-btn' src=' "+ copyIconURL +"'>"
         );
+
+        var preHeight = $(this).parent().height();
+
+        if(preHeight >= 50) {
+            $(this).parent().parent().children(".copy-btn").each(function() {
+                $(this).attr({height: '25', width: '25'});
+            });
+        } else {
+            $(this).parent().parent().children(".copy-btn").each(function() {
+                $(this).attr({height: '16', width: '16'});
+            });
+        }
     });
 
     $(".copy-btn").each(function( index ) {
@@ -41,14 +67,64 @@ function addCopyIcons() {
 
        $(this).click(function() {
            copyTextToClipboard(copy($(this).prev(".prettyprint").find("code")));
-           $(this).parent().each(function() {
-               $(this).prepend("<span class='copied-popup'>Copied. </span>");
-               $(this).find('.copy-popup').remove();
-           });
+           showCopiedStatus($(this).parent());
        });
+
+       initCopyKeybind($(this).parent());
+
     });
 }
 
+/**
+ * Parameter: copy-wrapper
+ */
+function showCopiedStatus( wrapper ) {
+    wrapper.each(function() {
+        $(this).prepend("<span class='copied-popup'>Copied. </span>");
+        $(this).find('.copy-popup').remove();
+    });
+}
+
+/**
+ * Parameter: copy-wrapper
+ */
+function initCopyKeybind( wrapper ) {
+    wrapper.hover(function() {
+            hoveredCode = copy(wrapper.children("pre").children("code"));
+            hoveredWrapper = wrapper;
+            document.addEventListener('keydown',shortcutCopy, false);
+        },
+        function() {
+            $(this).children(".copied-popup").remove();
+            document.removeEventListener('keydown', shortcutCopy);
+        });
+}
+
+var lastKey;
+
+function shortcutCopy( e ) {
+
+    var condition = (e.ctrlKey && e.key=="c");
+
+    if(OSName == "Mac/iOS") {
+
+        var cmdPressedLast = false;
+
+        if(lastKey!=null) {
+            if(lastKey == "Meta") {
+                cmdPressedLast = true;
+            }
+        }
+        lastKey = e.key;
+
+        condition = (cmdPressedLast && e.key == "c");
+    }
+
+    if(condition) {
+        copyTextToClipboard(hoveredCode);
+        showCopiedStatus(hoveredWrapper);
+    }
+}
 
 // 'pre code' jquery element
 function copy( codeblock ) {
@@ -83,14 +159,10 @@ function copy( codeblock ) {
         numAuthors = numAuthors + 1;
     });
 
-    alert(numAuthors);
-
     if(numAuthors <= 1) {
 
         userActionTime = userActionTime.children(":first").text().replace(/\s/g,'');
         userDetails = userDetails.children(":first");
-
-        alert("user action time: " + userActionTime + "\nuser details: " + userDetails);
 
         if (userActionTime == 'asked') {
             text = text + "\n" + commentCharacters + "Code by: " + userDetails.children("a").text();
