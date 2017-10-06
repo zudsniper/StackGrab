@@ -18,21 +18,25 @@ var hoveredWrapper;
 
 addCopyIcons();
 
+//adds and handles displayed copy buttons
 function addCopyIcons() {
 
     var copyIconURL = chrome.extension.getURL("resources/font-awesome-copy.svg");
 
+    //Wraps <pre> element in division element for non intrusive manipulation
     $("pre code").each(function( index ) {
         $(this).parent().wrap("<div class='copy-wrapper'></div>");
 
         var wrapper = $(this).parent().parent();
 
+        //adds <img>  copy button as a child of <pre>
         wrapper.append(
             "<img class='svg copy-btn' src=' "+ copyIconURL +"'>"
         );
 
         var preHeight = $(this).parent().height();
 
+        //defines dimensions of <img> copy button based on <pre> height as width will always be uniform
         if(preHeight >= 50) {
             $(this).parent().parent().children(".copy-btn").each(function() {
                 $(this).attr({height: '25', width: '25'});
@@ -44,14 +48,17 @@ function addCopyIcons() {
         }
     });
 
+    //handles events performed on the copy button
     $(".copy-btn").each(function( index ) {
 
+        //displays "copy" text when mouse is over button (handler for mouseenter)
        $(this).hover(
            function() {
                $(this).parent().each(function() {
                 $(this).prepend("<span class='copy-popup'>Copy</span>");
            });
         },
+           //removes any popups when mouse leaves the button (handler for mouseexit)
            function() {
               $(this).parent().each(function() {
                    $(this).children(":first.copy-popup, .copied-popup").each(function() {
@@ -60,12 +67,13 @@ function addCopyIcons() {
                });
        });
 
-
+       //copies and displays "copied" popup
        $(this).click(function() {
            copyTextToClipboard(copy($(this).prev(".prettyprint").find("code")));
            showCopiedStatus($(this).parent());
        });
 
+       //enables copy keybind for code segment
        initCopyKeybind($(this).parent());
     });
 }
@@ -73,6 +81,8 @@ function addCopyIcons() {
 /**
  * @param copy-wrapper
  */
+
+//shows "copied" rather than "copy" when the button has been pressed (code has been copied)
 function showCopiedStatus( wrapper ) {
     wrapper.each(function() {
         $(this).prepend("<span class='copied-popup'>Copied. </span>");
@@ -83,12 +93,15 @@ function showCopiedStatus( wrapper ) {
 /**
  * @param copy-wrapper
  */
+
 function initCopyKeybind( wrapper ) {
+    //enables keybinds when mouse is over code (cursor inside custom division) and displays "copied" popup
     wrapper.hover(function() {
             hoveredCode = copy(wrapper.children("pre").children("code"));
             hoveredWrapper = wrapper;
             document.addEventListener('keydown',shortcutCopy, false);
         },
+
         function() {
             $(this).children(".copied-popup").remove();
             document.removeEventListener('keydown', shortcutCopy);
@@ -96,7 +109,7 @@ function initCopyKeybind( wrapper ) {
 }
 
 var lastKey;
-
+//creates shortcuts
 function shortcutCopy( e ) {
 
 
