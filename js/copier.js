@@ -155,7 +155,7 @@ function copy( codeblock ) {
 
     //credit assignment starts here
 
-    var creditFooter = codeblock.parent().parent().parent().find(".fw");
+    var creditFooter = codeblock.parent().parent().parent().parent().find(".fw");
 
     var userActionTime = creditFooter.find("div.user-action-time");
     var userDetails = creditFooter.find("div.user-details");
@@ -167,13 +167,17 @@ function copy( codeblock ) {
 
     if(numAuthors <= 1) {
 
-        userActionTime = userActionTime.children(":first").text().replace(/\s/g,'');
-        userDetails = userDetails.children(":first");
 
-        if (userActionTime == 'asked') {
-            text = text + "\n" + commentCharacters + "Code by: " + userDetails.children("a").text();
-        } else if (userActionTime == 'answered') {
-            text = text + "\n" + commentCharacters + "Code by: " + userDetails.children("a").text();
+
+        userActionTime = userActionTime.text().replace(/\s/g,'');
+
+       // alert("userDetails text: " + userDetails.text());
+       // alert("userActionTime: " + userActionTime);
+
+        if (userActionTime.indexOf('asked') !== -1) {
+            text = text + "\n" + commentCharacters + "Code by: " + userDetails.find('a').text();
+        } else if (userActionTime.indexOf('answered') !== -1) {
+            text = text + "\n" + commentCharacters + "Code by: " + userDetails.find('a').text();
         }
     } else {
 
@@ -181,10 +185,10 @@ function copy( codeblock ) {
         var editor = "Anonymous";
 
         userActionTime.each(function( index ){
-           if($(this).text().replace(/\s/g,'')=='answered') {
-             author =  $(this).nextAll("div.user-details").children("a").text();
-           } else if($(this).text().replace(/\s/g,'')=='edited') {
-              editor =  $(this).nextAll("div.user-details").children("a").text();
+           if($(this).text().replace(/\s/g,'').indexOf('answered') !== -1) {
+             author = $(this).nextAll("div.user-details").children("a").text();
+           } else if($(this).text().replace(/\s/g,'').indexOf('edited') !== -1) {
+              editor = $(this).nextAll("div.user-details").children("a").text();
            }
         });
 
