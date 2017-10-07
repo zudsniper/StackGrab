@@ -3,14 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>StackGrab Popup</title>
-    <style src="css/style.css"></style>
+
+    <style type="text/css">
+        body {
+            min-width: 250px;
+            max-width: 100%;
+
+        }
+
+        .options-list-item {
+            display:inline-block;
+        }
+
+        .options-list-item input {
+            margin-right: 10px;
+        }
+    </style>
+
 </head>
 <body class="popup">
     <div>
-        <h1>StackGrab V0.4</h1>
+        <h1>StackGrab V0.41</h1>
     </div>
-    <div>
-        <p>Not much else here yet...</p>
+    <div class="main">
+       <ul class="options-list">
+          <li class="options-list-item">
+              <label><input type="checkbox" id="cite-sources"> Add Citation To Copied Code </label>
+          </li>
+       </ul>
     </div>
 </body>
 </html>
