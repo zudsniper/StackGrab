@@ -4,7 +4,7 @@ Simple copy button for codeblocks on stackoverflow
 ## Features
 - Copy Button For Code
 - OS-Dependent Copy Hotkey When Hovering Over Code
-- [wip] author-citing
+- Author Citation
 ### *Large Copy Icon*
 ![screenshot 1](http://i.imgur.com/wneni6K.png)
 ### *Small Copy Icon*
