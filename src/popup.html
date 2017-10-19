@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>StackGrab Popup</title>
-
+    <script src="popup.js"></script>
     <style type="text/css">
         body {
             min-width: 250px;
@@ -23,14 +23,18 @@
 </head>
 <body class="popup">
     <div>
-        <h1>StackGrab V0.41</h1>
+        <h1>StackGrab V0.5</h1>
     </div>
     <div class="main">
        <ul class="options-list">
           <li class="options-list-item">
               <label><input type="checkbox" id="cite-sources"> Add Citation To Copied Code </label>
           </li>
+          <li class="options-list-item">
+              <label><input type="checkbox" id="lang-detect"> Detect Language Comment Character </label>
+          </li>
        </ul>
     </div>
+    <input type="button" id="save-options"> Save </input>
 </body>
 </html>

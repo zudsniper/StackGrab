@@ -150,21 +150,21 @@ function copy( codeblock ) {
 
     var language;
     var text = "";
-    var commentCharacters = '//';
 
-   var classList = codeblock.parent().attr('class').split(/\s/);
+    var ccDict = {};
 
-    $.each(classList, function(index, item) {
-        if (item.substring(0, 5) === 'lang-') {
-           language = item.substring(5);
-        }
-    });
+    ccDict['default'] = ['<!--','-->'];
+    //TODO: Figure out how to differentiate between diff languages in "default" classification
+    ccDict['lang-java'] = ['//',''];
+    ccDict['lang-php'] = ['#',''];
+    ccDict['lang-js'] = ['//',''];
+
+    var clazz = codeblock.parent().attr('class');
+    var langClass = clazz.substring(0, clazz.indexOf(' prettyprint'));
 
     codeblock.find("span").each(function( i ) {
        text = text + $(this).text();
     });
-
-    //check comment type database, for now assume // is comment
 
     //credit assignment starts here
 
@@ -180,17 +180,19 @@ function copy( codeblock ) {
 
     if(numAuthors <= 1) {
 
-
-
         userActionTime = userActionTime.text().replace(/\s/g,'');
 
        // alert("userDetails text: " + userDetails.text());
        // alert("userActionTime: " + userActionTime);
 
-        if (userActionTime.indexOf('asked') !== -1) {
-            text = text + "\n" + commentCharacters + "Code by: " + userDetails.find('a').text();
-        } else if (userActionTime.indexOf('answered') !== -1) {
-            text = text + "\n" + commentCharacters + "Code by: " + userDetails.find('a').text();
+        if ( userActionTime.indexOf('asked') !== -1 ) {
+            text = text + "\n" + ccDict[langClass][0] + "Code by: " + userDetails.find('a').text();
+        } else {
+            if (userActionTime.indexOf('answered') !== -1) {
+                text = text + "\n" + ((userActionTime.indexOf('asked') == -1 ) ? ccDict[langClass][0] : '') + " Code by: " + userDetails.find('a').text() + ccDict[langClass][1];
+            } else {
+                text = text + " " + ccDict[langClass][1];
+            }
         }
     } else {
 
@@ -205,8 +207,8 @@ function copy( codeblock ) {
            }
         });
 
-        text = text + "\n" + commentCharacters + "Code by: " + author
-            + "\n"+ commentCharacters +"Edited by: " + editor;
+        text = text + "\n" + ccDict[langClass][0] + " Code by: " + author
+            + "\n" + "Edited by: " + editor + " " + ccDict[langClass][1];
 
     }
 
@@ -218,7 +220,7 @@ function copy( codeblock ) {
  * @param text
  */
 
-function copyTextToClipboard(text) {
+function copyTextToClipboard( text ) {
     var copyFrom = $('<textarea/>');
     copyFrom.text(text);
     $('body').append(copyFrom);
